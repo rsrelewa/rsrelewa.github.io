@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Our Memory Map & Valentine's Day Card</title>
+
+    <!-- Stylesheets for Leaflet and the Valentine's Day Card -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="/_next/static/css/554796c3191cdae8.css" crossorigin="" data-precedence="next">
+
+    <!-- Preload resources -->
+    <link rel="preload" href="/_next/static/media/c9a5bc6a7c948fb0-s.p.woff2" as="font" crossorigin="" type="font/woff2">
+    <link rel="preload" as="image" href="https://gifdb.com/images/high/cute-love-bear-roses-ou7zho5oosxnpo6k.gif">
+    <link rel="preload" as="script" fetchpriority="low" href="/_next/static/chunks/webpack-7086a7543d1dc029.js" crossorigin="">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16">
+
+    <style>
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color:white;
+    height: 100vh;
+}
+
+#firstPage, #mainContent, #mealPlanner, #menuPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+}
+
+.header, .valentines-card, #mealPlanner h2, #menuPage {
+    margin-bottom: 30px;
+}
+
+.header h1, .valentines-card h1, #mealPlanner h2 {
+    font-family: 'Merriweather', serif;
+    color: #FFB6C1; /* Softer pink for headers */
+    margin: 20px 0;
+}
+
+.header p, #chefSection p, .meal-card p {
+    color: #6D6875; /* Darker grey for contrast and readability */
+}
+
+#map {
+    height: 60vh;
+    width: 80%;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.timeline, .meal-options, #menuOptions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.timeline button, .valentines-card button, #continue, #submitMenu {
+    background-color: #FADADD; /* Lighter pink for buttons */
+    color: #333;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: transform 0.2s ease-out, background-color 0.3s;
+
+
+}
+
+button{
+    background-color: #FADADD; /* Lighter pink for buttons */
+    color: #333;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: transform 0.2s ease-out, background-color 0.3s;
+}
+
+.valentines-card .no{
+    background-color: #bb5862; /* Lighter pink for buttons */
+    color: #333;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: transform 0.2s ease-out, background-color 0.3s;
+}
+
+#chefSection{
+    display: flex;
+    width:500px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#mainContent #continue{
+    background-color: #dafada; /* Lighter pink for buttons */
+    color: #333;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: transform 0.2s ease-out, background-color 0.3s;
+}
+
+
+.timeline button:hover, .valentines-card button:hover, #continue:hover, #submitMenu:hover {
+    background-color: #E6A8A8; /* Slightly darker pink on hover */
+    transform: translateY(-3px);
+}
+
+.meal-card {
+    border: 1px solid #FFC0CB; /* Soft pink border for meal cards */
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.meal-card:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.meal-card img {
+    width: 100%;
+    border-bottom: 1px solid #FFC0CB; /* Soft pink to separate image from text */
+}
+
+.selected-meal img {
+    height: 150px;
+    object-fit: cover;
+}
+
+#chefSection img {
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    #map, .timeline, .meal-options, #menuOptions {
+        width: 90%;
+    }
+
+    .meal-card, .selected-meal {
+        width: 100%;
+    }
+}
+#mealPlanner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px 0;
+}
+
+#mealPlanner section {
+    width: 80%; /* Adjust based on preference */
+    max-width: 1200px; /* Ensures layout does not stretch too far on larger screens */
+    margin: 0 auto 30px; /* Centers content and adds space between sections */
+}
+
+.meal-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.meal-card {
+    flex: 1; /* Allows cards to grow */
+    min-width: 250px; /* Minimum width before wrapping */
+    max-width: 300px; /* Maximum width to maintain a consistent size */
+    border: 1px solid #FFC0CB; /* Soft pink border */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease-in-out, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.meal-card:hover {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    transform: translateY(-5px);
+}
+
+.meal-card img {
+    width: 100%;
+    display: block; /* Ensures the image fits the container width */
+    height: auto; /* Maintains aspect ratio */
+}
+
+.meal-card p {
+    margin: 0;
+    padding: 10px;
+    background-color: #FADADD; /* Light pink background for the text */
+    color: #333; /* Text color */
+}
+
+/* Improve responsiveness on smaller screens */
+@media (max-width: 768px) {
+    #mealPlanner section {
+        width: 90%;
+    }
+
+    .meal-card {
+        min-width: 200px; /* Adjusts for smaller screen sizes */
+    }
+}
+
+.game-container {
+    text-align: center;
+    border: 2px solid #000;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#encryptedMessage {
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+input[type=number] {
+    margin: 10px 0;
+}
+
+#puzzle {
+            width: 120px;
+            height: 120px;
+            margin: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+        }
+        .tile {
+            width: 38px;
+            height: 38px;
+            background-color: skyblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+        .empty {
+            background-color: white;
+            cursor: default;
+        }
+
+        #dayPlan{
+            flex-direction:column; align-items:center; justify-content:center; margin-top:20px;
+        }
+
+        #dayPlan h2 {
+    font-family: 'Merriweather', serif;
+    color: #FFB6C1; /* Keeping the header consistent with the theme */
+}
+
+.activity-card {
+    border: 1px solid #FFC0CB; /* Soft pink border for activity cards */
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease-in-out;
+    margin: 10px;
+    width: calc(33% - 20px); /* Adjust size to fit three cards in a row with spacing */
+}
+
+.activity-card:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.activity-card img {
+    width: 100%;
+    height: auto; /* Maintains aspect ratio */
+    border-bottom: 1px solid #FFC0CB; /* Soft pink to separate image from text */
+}
+
+.activity-card p {
+    margin: 0;
+    padding: 10px;
+    background-color: #FADADD; /* Light pink background for the text */
+    color: #333; /* Text color */
+}
+
+@media (max-width: 768px) {
+    .activity-card {
+        width: 100%; /* Full width on smaller screens */
+    }
+}
+
+.puzzle-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+}
+
+.puzzle-piece {
+    padding: 10px 20px;
+    margin: 2px;
+    background-color: lightgrey;
+    border: 1px solid #000;
+    cursor: grab;
+}
+
+
+
+    </style>
+    
+</head>
+<body>
+    <div class="game-containerOne">
+        <h2></h2>
+        <p>Decrypt the message!</p>
+        <div id="encryptedMessage"></div>
+        <label for="keyInput">Enter the key (number):</label>
+        <input type="number" id="keyInput">
+        <button id="cryptoBtn">Decrypt</button>
+        <div id="result"></div>
+    </div>
+
+    <div style="display:none;" id="firstPage" class="valentines-card">
+        <img src="https://media.tenor.com/K_E6ORTmXMoAAAAM/milk-and-mocha-love.gif" alt="Cute Love Bear with Roses">
+        <h1>pls say yes... pls...</h1>
+        <div class="flex flex-wrap flex-col md:flex-row gap-4 items-center justify-center">
+            <button class="yes bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Yes</button>
+            <button class="no bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">No</button>
+        </div>
+    </div>
+    <div style="display:none;" id="mainContent">
+        <div class="header">
+            <h1>Our Memory Map</h1>
+            <p>Exploring our journey, one meme at a time.</p>
+        </div>
+        <div id="map"></div>
+        <div class="timeline">
+            
+        </div>
+
+
+        <button id="continue">Follow me, the way to your heart.</button>
+        
+    </div>
+
+    <div id="guessTheWordGame" style="display:none;" class="game-container">
+        <h2>Guess the FOOD!</h2>
+        <p id="hint">Hint: Your favorite thing</p>
+        <div id="wordToGuess">_ _ _ _ _ _ _  _ _ _ _ _ _ _ </div>
+        <div id="letters">
+            <p>Guess a letter:</p>
+            <input type="text" id="letterInput" maxlength="1">
+            <button id="guessBtn">Guess</button>
+        </div>
+        <p id="status"></p>
+        <p>Attempts left: <span id="attempts">10</span></p>
+    </div>
+
+    <div style="display:none;" id="mealPlanner">
+        <section id="lunch">
+            <p>It's time to eat up, pick your food options for our private Chef Raghid where sensuality and cooking combine</p>
+            <h2>Lunch Options</h2>
+            <div class="meal-options">
+                <div class="meal-card" data-meal="Bibimap">
+                    <img src="https://iheartumami.com/wp-content/uploads/2021/04/Keto-Korean-Bibimbap-Recipe-Vegetarian-I-Heart-Umami.jpg" alt="Bibimap">
+                    <p>Badass Bibimap</p>
+                </div>
+                <div class="meal-card" data-meal="Soup">
+                    <img style="height: 448px;" src="https://hips.hearstapps.com/hmg-prod/images/valentines-day-lunch-ideas-french-onion-soup-65b9171bcb3cb.jpeg" alt="Soup">
+                    <p>French 'Made by an Arab' Onion Soup </p>
+                </div>
+                <div class="meal-card" data-meal="Sandwich">
+                    <img style="height: 448px;" src="https://www.mrsbairds.com/sites/default/files/2022-08/MB_4879_2021_ItalianColdCutsSandwich_1500x535.jpg" alt="Sandwich">
+                    <p>'Special Sauce' Sandwich</p>
+                </div>
+            </div>
+        </section>
+        <section id="dinner" style="display:none;">
+            <h2>Dinner Options</h2>
+            <div class="meal-options">
+                <div class="meal-card" data-meal="Steak">
+                    <img src="https://natashaskitchen.com/wp-content/uploads/2020/03/Pan-Seared-Steak-4.jpg" alt="Steak">
+                    <p>'Strip'loin Steak</p>
+                </div>
+                <div class="meal-card" data-meal="Pasta">
+                    <img src="https://www.spendwithpennies.com/wp-content/uploads/2023/04/1200-Spaghetti-Carbonara-2-SpendWithPennies.jpg" alt="Fish">
+                    <p>Ca'rbonara'ca Pasta</p>
+                </div>
+                <div class="meal-card" data-meal="Noodles">
+                    <img src="https://www.acedarspoon.com/wp-content/uploads/2023/02/Easy-Ramen-Noodle-Soup-Image-10.jpg" alt="Vegan Burger">
+                    <p>Not so Instant Noodles</p>
+                </div>
+                <div class="meal-card" data-meal="Hotpot">
+                    <img style="height: 405px;" src="https://images.squarespace-cdn.com/content/v1/52d3fafee4b03c7eaedee15f/c523fb53-2812-4cf3-8ef6-9b8036d04914/after-7576.jpg" alt="Vegan Burger">
+                    <p>'Hot' Pot and we're not talking about the pot</p>
+                </div>
+            </div>
+        </section>
+        <section id="dessert" style="display:none;">
+            <h2>Dessert/Snack Options</h2>
+            <div class="meal-options">
+                <div class="meal-card" data-meal="ChocolateCoveredIcecream">
+                    <img style="height: 300px;" src="https://food.fnr.sndimg.com/content/dam/images/food/fullset/2020/01/14/0/FNK_CHOCOLATE_COVERED_STRAWBERRIES_H.jpg.rend.hgtvcom.1280.1280.suffix/1579042627182.jpeg" alt="Chocolate Covered Icecream">
+                    <p>Chocolate Covered Icecream.. yes that is the 'special sauce' on that chocolate edition</p>
+                </div>
+                <div class="meal-card" data-meal="NutellaCrepes">
+                    <img style="height: 333px;" src="https://www.aheadofthyme.com/wp-content/uploads/2020/01/nutella-crepes.jpg" alt="NutellaCrepes">
+                    <p>'Nut'ella Crepes</p>
+                </div>
+                <div class="meal-card" data-meal="Panna Cotta">
+                    <img style="height: 315px;" src="https://static01.nyt.com/images/2023/08/10/multimedia/LH-Panna-Cotta-wczm/LH-Panna-Cotta-wczm-superJumbo.jpg" alt="Panna Cotta">
+                    <p>Panna Cotta and the white is NOT the custard..</p>
+                </div>
+            </div>
+            
+        </section>
+        <button  style="display:none;" id="submitMenu">Show Menu</button>
+    </div>
+
+    <div id="menuPage" style="display:none;">
+        <div id="menuOptions">
+            <!-- Selected options will be displayed here -->
+        </div>
+        <div id="chefSection">
+            <img src="https://scontent-ord5-1.xx.fbcdn.net/v/t1.6435-9/29178565_10160326730665457_707327181746864128_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=be3454&_nc_ohc=wmF2Xf7jHxwAX_eo4qG&_nc_ht=scontent-ord5-1.xx&oh=00_AfAZWboRydqzVpaMVTujrKGev17-8yJlPigBNi3LHPuowA&oe=65EF8870" alt="Chef" style="width:100%; max-height:300px; object-fit: contain;">
+            <p>Meet the Chef:<br>This Valentine's Day, indulge in the sultry flavors of Chef Raghid Elewa's kitchen, where every dish serves up a saucy wink and a seductive nudge. With a reputation for blending the fiery spices of love with the creamy textures of culinary mastery, Chef Raghid, invites you to a feast that's as naughty as it is nice. They say the way to a person's heart is through their stomach, but here, we aim a little lower, teasing your taste buds and igniting your desires with every bite. Prepare to be seduced by a menu that's dripping with passion, where each dish whispers sweet nothings and promises of more to come. So, let the flicker of candlelight set the mood, and dive fork-first into an evening where the food isn't the only thing getting steamy. In Chef Raghid's realm, we don't just flirt with flavor—we make it fall madly in love.</p>
+        </div>
+
+        <button id="connect">Click for nudes</button>
+    </div>
+    
+    <div id="gameCanvas" style="display:none;">
+        <p>You perv.. it's another puzzle!</p><br>
+        <p>Correct Ordering Hint: DD/MM/YYYY</p>
+        <div id="puzzle" class="puzzle-container">
+            <!-- Dynamically filled with puzzle pieces -->
+        </div>
+        <br><br><br>
+        <button id="checkSolution">Check Solution</button>
+    </div>
+
+    <div id="dayPlan" style="display: none;">
+        <h2>The Extras: Your Day of Love & Relaxation </h2>
+        <div class="timelineA">
+            <div class="activity-card">
+                <img src="https://t4.ftcdn.net/jpg/03/02/92/35/360_F_302923519_kByrdVBiLnXclK167x0GpRAGS1Til57L.jpg" alt="Bubble Tea Break" style="width:100%; border-radius:8px;">
+                <p>Bubble Tea Break</p>
+            </div>
+           
+            
+            <div class="activity-card">
+                <img src="us/jacked.JPG" alt="Massage Break" style="width:100%; border-radius:8px;">
+                <p>Relaxing Massage Break</p>
+                
+            </div>
+           
+            <div class="activity-card">
+                <img src="us/hamilton.JPG" alt="Watch a Movie" style="width:100%; border-radius:8px;">
+                <p>Cozy Movie Time</p>
+            </div>
+        </div>
+        <p>THANK YOU FOR BEING MY VALENTINES!!!</p>
+    </div>
+    
+   
+    
+    
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
